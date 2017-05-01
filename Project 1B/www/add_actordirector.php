@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Project 1B</title>
-  <link href="style.css" type="text/css" rel="stylesheet" media="all">
-  <link href="bootstrap.min.css" type="text/css" rel="stylesheet" media="all">
-  <link href="bootstrap.min.js" type="text/css" rel="stylesheet" media="all">
-  <link href="jquery-3.2.1.min.js" type="text/css" rel="stylesheet" media="all">
+  <head>
+    <meta charset="utf-8">
+    <title>Project 1B</title>
+    <link href="style.css" type="text/css" rel="stylesheet" media="all">
+    <link href="bootstrap.min.css" type="text/css" rel="stylesheet" media="all">
+    <link href="bootstrap.min.js" type="text/css" rel="stylesheet" media="all">
+    <link href="jquery-3.2.1.min.js" type="text/css" rel="stylesheet" media="all">
 
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-</head>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  </head>
   <body>
     <!-- Navbar -->
     <div class="navbar navbar-inverse navbar-static-top center" role="navigation">
@@ -132,13 +130,12 @@
           <br>
           <?php 
             $db_connection = mysql_connect("localhost", "cs143", "");
-            mysql_select_db("CS143", $db_connection);
+            mysql_select_db("TEST", $db_connection);
       
             // get maxperson id
             $rs = mysql_query("SELECT id FROM MaxPersonID", $db_connection);
-            if(!$rs) {
+            if(!$rs)
               die("Query failed: " . mysql_error());
-            }
             $row = mysql_fetch_row($rs);
             $MaxPersonID = $row[0];
        
@@ -153,24 +150,31 @@
             $dob = "\"" . $_GET["DOB"] . "\"";
             $dod = "\"" . $_GET["DOD"] . "\"";
             if($dod == "\"\"") $dod = "null";
-            $query = "INSERT INTO " . $identity . " VALUES(" . $new_id . "," . $lname . "," . $fname . "," . $sex . "," . $dob . "," . $dod . ")";
-
+            
             // insert into database
             if(isset($_GET["btnSubmit"])) {
-              if(!$fname) {
+              if(!$fname)
                 echo "Query failed: first name is empty.<br>";
-              }
-              if(!$lname) {
+
+              if(!$lname)
                 echo "Query failed: last name is empty.<br>";
-              }
-              if(!$dob) {
+
+              if(!$dob)
                 echo "Query failed: date of birth is empty.<br>";
-              }
+
+              $date_regex = "/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/";
+              if(preg_match($date_regex, $dob))
+                echo "Query failed: date of birth does not match format YYYY-MM-DD";
+
+              if($dod != "null" && preg_match($date_regex, $dod))
+                echo "Query failed: date of death does not match format YYYY-MM-DD";
+
               if($fname && $lname && $dob) {
+                $query = "INSERT INTO " . $identity . " VALUES(" . $new_id . "," . $lname . "," . $fname . "," . $sex . "," . $dob . "," . $dod . ")";
+
                 $rs = mysql_query($query, $db_connection);
-                if(!rs) {
+                if(!rs)
                   die("Query failed: " . mysql_error());
-                }
                 else {
                   echo "Successfully insert into database.";
 

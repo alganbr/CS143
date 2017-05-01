@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Project 1B</title>
-  <link href="style.css" type="text/css" rel="stylesheet" media="all">
-  <link href="bootstrap.min.css" type="text/css" rel="stylesheet" media="all">
-  <link href="bootstrap.min.js" type="text/css" rel="stylesheet" media="all">
-  <link href="jquery-3.2.1.min.js" type="text/css" rel="stylesheet" media="all">
+  <head>
+    <meta charset="utf-8">
+    <title>Project 1B</title>
+    <link href="style.css" type="text/css" rel="stylesheet" media="all">
+    <link href="bootstrap.min.css" type="text/css" rel="stylesheet" media="all">
+    <link href="bootstrap.min.js" type="text/css" rel="stylesheet" media="all">
+    <link href="jquery-3.2.1.min.js" type="text/css" rel="stylesheet" media="all">
 
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-</head>
-<body>
-   <!-- Navbar -->
-    <div class="navbar navbar-inverse navbar-static-top center" role="navigation">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  </head>
+  <body>
+      <!-- Navbar -->
+      <div class="navbar navbar-inverse navbar-static-top center" role="navigation">
         <div class="container">
 
           <div class="navbar-header">
@@ -28,12 +26,12 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-              <a href="index.php">
-                <div class="navbar-brand">
-                  CS 143
-                  <small>Project 1B</small>
-                </div>
-              </a>
+            <a href="index.php">
+              <div class="navbar-brand">
+                CS 143
+                <small>Project 1B</small>
+              </div>
+            </a>
           </div>
 
           <div class="navbar-collapse collapse">
@@ -67,57 +65,115 @@
 
         </div>
       </div>
-    </nav>
-  <!-- End Navbar -->
+      <!-- End Navbar -->
 
-  <!-- Section -->
-  <div class="container" style="margin-left: 0">
-    <div class="row">
+    <!-- Section -->
+    <div class="container" style="margin-left: 0">
+      <div class="row">
 
-      <div class="col-md-3 sidebar">
-        <ul class="nav nav-sidebar">
-            <h3>Add New Content</h3>
-            <li><a href="add_actordirector.php">Add Actor/Director</a></li>
-            <li><a href="add_movie.php">Add Movie Information</a></li>
-            <li><a href="add_movieactor.php">Add Movie/Actor Relation</a></li>
-            <li><a href="add_moviedirector.php">Add Movie/Director Relation</a></li>
-          </ul>
-
+        <div class="col-md-3 sidebar">
           <ul class="nav nav-sidebar">
-            <h3>Browsing Content</h3>
-            <li><a href="show_actor.php">Show Actor Information</a></li>
-            <li><a href="show_movie.php">Show Movie Information</a></li>
-          </ul>
+              <h3>Add New Content</h3>
+              <li><a href="add_actordirector.php">Add Actor/Director</a></li>
+              <li><a href="add_movie.php">Add Movie Information</a></li>
+              <li><a href="add_movieactor.php">Add Movie/Actor Relation</a></li>
+              <li><a href="add_moviedirector.php">Add Movie/Director Relation</a></li>
+            </ul>
 
-          <ul class="nav nav-sidebar">
-            <h3>Search Interface</h3>
-            <li><a href="search.php">Search Actor/Movie</a></li>
-          </ul>
-      </div>
-      <div class="col-md-9">
-        <form action="add_actordirector.php" method="GET" style="margin-left: 5%">
-          <h3>Add Movie Actor</h3>
-          <div class="form-group">
-             <label for="rating">Movie</label>
-             <select class="form-control" name="movieid">
+            <ul class="nav nav-sidebar">
+              <h3>Browsing Content</h3>
+              <li><a href="show_actor.php">Show Actor Information</a></li>
+              <li><a href="show_movie.php">Show Movie Information</a></li>
+            </ul>
 
-             </select>
-          </div>
+            <ul class="nav nav-sidebar">
+              <h3>Search Interface</h3>
+              <li><a href="search.php">Search Actor/Movie</a></li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+          <form action="add_moviedirector.php" method="GET" style="margin-left: 5%">
+            <h3>Add Movie Director</h3>
+            <div class="form-group">
+               <label for="movieid">Movie</label>
+               <select class="form-control" name="movieid">
+                <option value="" selected></option>
+                  <?php
+                    $db_connection = mysql_connect("localhost", "cs143", "");
+                    mysql_select_db("TEST", $db_connection);
+
+                    $movie_query = mysql_query("SELECT id, title, year FROM Movie ORDER BY title", $db_connection);
+                    if(!$movie_query) {
+                      die("Query failed: " . mysql_error());
+                    }
+                    $movie_count = mysql_num_rows($movie_query);
+
+                    while($row = mysql_fetch_assoc($movie_query)){
+                      $movies[] = array($row["id"], $row["title"], $row["year"]);
+                    }
+                    for ($i = 0; $i < $movie_count; $i++) {
+                      $cur = $movies[$i];
+                      echo "<option value='" . $cur[0] . "'>" . $cur[1] . " (" . $cur[2] . ")</option>";
+                    }
+                  ?>
+               </select>
+            </div>
+            <br>
+            <div class="form-group">
+               <label for="directorid">Director</label>
+               <select class="form-control" name="directorid">
+                <option value="" selected></option>
+                  <?php
+                    $director_query = mysql_query("SELECT id, first, last, dob FROM Director ORDER BY last, first", $db_connection);
+                    if(!$director_query) {
+                      die("Query failed: " . mysql_error());
+                    }
+                    $director_count = mysql_num_rows($director_query);
+
+                    while($row = mysql_fetch_assoc($director_query)){
+                      $directors[] = array($row["id"], $row["first"], $row["last"], $row["dob"]);
+                    }
+                    for ($i = 0; $i < $director_count; $i++) {
+                      $cur = $directors[$i];
+                      echo "<option value='" . $cur[0] . "'>" . $cur[1] . " " . $cur[2] . " (" . $cur[3] . ")</option>";
+                    }
+                  ?>
+               </select>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-default" name="btnSubmit">Add</button>
+          </form>
           <br>
-          <div class="form-group">
-             <label for="rating">Director</label>
-             <select class="form-control" name="directorid">
+          <?php
+            // create insertion query
+            $movieid = $_GET["movieid"];
+            $directorid = $_GET["directorid"];
 
-             </select>
-          </div>
-          <br>
-          <button type="submit" class="btn btn-default">Add</button>
-        </form>
+            // insert into database
+            if(isset($_GET["btnSubmit"])) {
+              if(!$movieid)
+                echo "Query failed: movieid is empty.<br>";
+
+              if(!$directorid)
+                echo "Query failed: directorid is empty.<br>";
+
+              if(!$role)
+                echo "Query failed: role is empty.<br>";
+
+              if($movieid && $directorid && $role) {
+                $query = "INSERT INTO MovieDirector VALUES(" . $movieid . "," . $directorid . ")";
+
+                $rs = mysql_query($query, $db_connection);
+                if(!rs)
+                  die("Query failed: " . mysql_error());
+                else
+                  echo "Successfully insert into database.";
+              }
+              mysql_close($db_connection);
+            }
+          ?>
+        </div>
       </div>
     </div>
-  </div>
-
-
-</body>
-
+  </body>
 </html>
