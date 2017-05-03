@@ -100,9 +100,9 @@
                 <option value="" selected></option>
                   <?php
                     $db_connection = mysql_connect("localhost", "cs143", "");
-                    mysql_select_db("TEST", $db_connection);
+                    mysql_select_db("CS143", $db_connection);
 
-                    $movie_query = mysql_query("SELECT id, title, year FROM Movie ORDER BY title", $db_connection);
+                    $movie_query = mysql_query("SELECT id, title, year FROM Movie ORDER BY title ASC", $db_connection);
                     if(!$movie_query) {
                       die("Query failed: " . mysql_error());
                     }
@@ -124,7 +124,7 @@
                <select class="form-control" name="directorid">
                 <option value="" selected></option>
                   <?php
-                    $director_query = mysql_query("SELECT id, first, last, dob FROM Director ORDER BY last, first", $db_connection);
+                    $director_query = mysql_query("SELECT id, first, last, dob FROM Director ORDER BY last, first ASC", $db_connection);
                     if(!$director_query) {
                       die("Query failed: " . mysql_error());
                     }
@@ -157,17 +157,16 @@
               if(!$directorid)
                 echo "Query failed: directorid is empty.<br>";
 
-              if(!$role)
-                echo "Query failed: role is empty.<br>";
-
-              if($movieid && $directorid && $role) {
+              if($movieid && $directorid) {
                 $query = "INSERT INTO MovieDirector VALUES(" . $movieid . "," . $directorid . ")";
 
                 $rs = mysql_query($query, $db_connection);
-                if(!rs)
+                if(!$rs) {
                   die("Query failed: " . mysql_error());
-                else
-                  echo "Successfully insert into database.";
+                }
+                else {
+                  echo "Add MovieDirector Success.";
+                }
               }
               mysql_close($db_connection);
             }

@@ -130,7 +130,7 @@
           <br>
           <?php 
             $db_connection = mysql_connect("localhost", "cs143", "");
-            mysql_select_db("TEST", $db_connection);
+            mysql_select_db("CS143", $db_connection);
       
             // get maxperson id
             $rs = mysql_query("SELECT id FROM MaxPersonID", $db_connection);
@@ -170,13 +170,24 @@
                 echo "Query failed: date of death does not match format YYYY-MM-DD";
 
               if($fname && $lname && $dob) {
-                $query = "INSERT INTO " . $identity . " VALUES(" . $new_id . "," . $lname . "," . $fname . "," . $sex . "," . $dob . "," . $dod . ")";
-
-                $rs = mysql_query($query, $db_connection);
-                if(!rs)
-                  die("Query failed: " . mysql_error());
+                if($identity == "Actor") {
+                  $query = "INSERT INTO " . $identity . " VALUES(" . $new_id . "," . $lname . "," . $fname . "," . $sex . "," . $dob . "," . $dod . ")";
+                }
                 else {
-                  echo "Successfully insert into database.";
+                  $query = "INSERT INTO " . $identity . " VALUES(" . $new_id . "," . $lname . "," . $fname . "," . $dob . "," . $dod . ")";
+                }
+                $rs = mysql_query($query, $db_connection);
+                if(!$rs) {
+                  die("Query failed: " . mysql_error());
+                }
+                else {
+                  echo "Add " . $_GET["identity"] . " Success:<br>";
+                  if($dod == "null") {
+                    echo $new_id . " " . $_GET["lname"]  . " " . $_GET["fname"] . " " . $_GET["sex"] . " " . $_GET["DOB"] . " Still alive";
+                  }
+                  else {
+                    echo $new_id . " " . $_GET["lname"]  . " " . $_GET["fname"] . " " . $_GET["sex"] . " " . $_GET["DOB"] . " " . $_GET["DOD"];
+                  }
 
                   // update maxperson id
                   mysql_query("UPDATE MaxPersonID SET id=" . $new_id, $db_connection);

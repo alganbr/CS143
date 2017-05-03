@@ -100,9 +100,9 @@
                 <option value="" selected></option>
                 <?php
                   $db_connection = mysql_connect("localhost", "cs143", "");
-                  mysql_select_db("TEST", $db_connection);
+                  mysql_select_db("CS143", $db_connection);
 
-                  $movie_query = mysql_query("SELECT id, title, year FROM Movie ORDER BY title", $db_connection);
+                  $movie_query = mysql_query("SELECT id, title, year FROM Movie ORDER BY title ASC", $db_connection);
                   if(!$movie_query) {
                     die("Query failed: " . mysql_error());
                   }
@@ -123,7 +123,7 @@
                 <select class="form-control" name="actorid">
                   <option value="" selected></option>
                   <?php
-                    $actor_query = mysql_query("SELECT id, first, last, dob FROM Actor ORDER BY last, first", $db_connection);
+                    $actor_query = mysql_query("SELECT id, first, last, dob FROM Actor ORDER BY last, first ASC", $db_connection);
                     if(!$actor_query) {
                       die("Query failed: " . mysql_error());
                     }
@@ -170,10 +170,12 @@
                 $query = "INSERT INTO MovieActor VALUES(" . $movieid . "," . $actorid . "," . $role . ")";
 
                 $rs = mysql_query($query, $db_connection);
-                if(!rs)
+                if(!$rs) {
                   die("Query failed: " . mysql_error());
-                else
-                  echo "Successfully insert into database.";
+                }
+                else {
+                  echo "Add MovieActor Success.";
+                }
               }
               mysql_close($db_connection);
             }

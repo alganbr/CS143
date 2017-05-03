@@ -111,7 +111,7 @@
               <select class="form-control" name="rate">
                 <?php
                   $db_connection = mysql_connect("localhost", "cs143", "");
-                  mysql_select_db("TEST", $db_connection);
+                  mysql_select_db("CS143", $db_connection);
 
                   $mpaa_query = mysql_query("SELECT DISTINCT(rating) FROM Movie ORDER BY rating ASC", $db_connection);
                   if(!$mpaa_query) {
@@ -127,9 +127,6 @@
             <div class="form-group">
               <label for="genre">Genre:</label>
               <?php
-                $db_connection = mysql_connect("localhost", "cs143", "");
-                mysql_select_db("TEST", $db_connection);
-
                 $genre_query = mysql_query("SELECT DISTINCT genre FROM MovieGenre ORDER BY genre", $db_connection);
                 if(!$genre_query) {
                   die("Query failed: " . mysql_error());
@@ -192,10 +189,12 @@
                 $query_M = mysql_query($query_Movie, $db_connection);
                 $query_MG = mysql_query($query_MovieGenre, $db_connection);
 
-                if(!query_M || !$query_MG)
+                if(!$query_M || !$query_MG) {
                   die("Query failed: " . mysql_error());
+                }
                 else {
-                  echo "Successfully insert into database.";
+                  echo "Add Movie Success:<br>";
+                  echo $new_id . " " . $_GET["title"]  . " " . $_GET["company"] . " " . $_GET["year"] . " " . $_GET["rate"];
 
                   // update maxmovie id
                   mysql_query("UPDATE MaxMovieID SET id=" . $new_id, $db_connection);
