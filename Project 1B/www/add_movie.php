@@ -109,12 +109,19 @@
             <div class="form-group">
               <label for="rate">MPAA Rating</label>
               <select class="form-control" name="rate">
-                <option value="G">G</option>
-                <option value="NC-17">NC-17</option>
-                <option value="PG">PG</option>
-                <option value="PG-13">PG-13</option>
-                <option value="R">R</option>
-                <option value="surrendere">surrendere</option>
+                <?php
+                  $db_connection = mysql_connect("localhost", "cs143", "");
+                  mysql_select_db("TEST", $db_connection);
+
+                  $mpaa_query = mysql_query("SELECT DISTINCT(rating) FROM Movie ORDER BY rating ASC", $db_connection);
+                  if(!$mpaa_query) {
+                    die("Query failed: " . mysql_error());
+                  }
+
+                  while($row = mysql_fetch_row($mpaa_query)){
+                    echo "<option value='" . $row[0] . "'>" . $row[0] . "</option>";
+                  }
+                ?>
               </select>
             </div>
             <div class="form-group">
