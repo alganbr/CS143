@@ -96,33 +96,30 @@
           <form action="search.php" method="GET" style="margin-left: 5%">
             <h3>Search Page</h3>
             <div class="form-group">
-               <label for="search">Search</label>
+              <label for="search">Search</label>
               <input type="text" class="form-control" placeholder="Search..." name="terms">
             </div>
-            <button type="submit" class="btn btn-default" name="btnSubmit">Add</button>
+            <button type="submit" class="btn btn-default">Add</button>
             <?php 
             $db_connection = mysql_connect("localhost", "cs143", "");
             mysql_select_db("CS143", $db_connection);
 
-            if(isset($_GET["btnSubmit"])) {
-
-              if($_GET["terms"]) {
-                $term = explode(" ", $_GET["terms"]);
-                $actor_condition = "";
-                $movie_condition = "";
-                for($i = 0; $i < count($term); $i++) {
-                  if($i != 0) {
-                    $actor_condition .= " AND ";
-                    $movie_condition .= " AND ";
-                  }
-                  $actor_condition .= "CONCAT(first, \" \", last) REGEXP '" . $term[$i] . "'";
-                  $movie_condition .= "title REGEXP '" . $term[$i] . "'";
+            if($_GET["terms"]) {
+              $term = explode(" ", $_GET["terms"]);
+              $actor_condition = "";
+              $movie_condition = "";
+              for($i = 0; $i < count($term); $i++) {
+                if($i != 0) {
+                  $actor_condition .= " AND ";
+                  $movie_condition .= " AND ";
                 }
-                $actor_query = mysql_query("SELECT CONCAT(first, \" \", last) AS name, dob FROM Actor WHERE(" . $actor_condition . ")", $db_connection);
-                $movie_query = mysql_query("SELECT title, year FROM Movie WHERE(" . $movie_condition . ")", $db_connection);
-                if((!$actor_query) || (!$movie_query))
-                  die("Query failed: " . mysql_error());
+                $actor_condition .= "CONCAT(first, \" \", last) REGEXP '" . $term[$i] . "'";
+                $movie_condition .= "title REGEXP '" . $term[$i] . "'";
               }
+              $actor_query = mysql_query("SELECT id, CONCAT(first, \" \", last) AS name, dob FROM Actor WHERE(" . $actor_condition . ")", $db_connection);
+              $movie_query = mysql_query("SELECT id, title, year FROM Movie WHERE(" . $movie_condition . ")", $db_connection);
+              if((!$actor_query) || (!$movie_query))
+                die("Query failed: " . mysql_error());
 
               // Matching Actors
               echo "<h4>Matching Actors</h4>";
@@ -133,8 +130,8 @@
                     echo "<tbody>";
                       while($actor_row = mysql_fetch_assoc($actor_query)) {
                         echo "<tr>";
-                          echo "<td>" . $actor_row["name"] . "</td>";
-                          echo "<td>" . $actor_row["dob"] . "</td>";
+                          echo "<td><a href=\"show_actor.php?identifier=" . $actor_row["id"] .  "\">" . $actor_row["name"] . "</a></td>";
+                          echo "<td><a href=\"show_actor.php?identifier=" . $actor_row["id"] .  "\">" . $actor_row["dob"] . "</a></td>";
                         echo "</tr>";
                       }
                     echo "</tbody>";
@@ -152,8 +149,8 @@
                     echo "<tbody>";
                       while($movie_row = mysql_fetch_assoc($movie_query)) {
                         echo "<tr>";
-                          echo "<td>" . $movie_row["title"] . "</td>";
-                          echo "<td>" . $movie_row["year"] . "</td>";
+                          echo "<td><a href=\"show_movie.php?identifier=" . $movie_row["id"] .  "\">" . $movie_row["title"] . "</a></td>";
+                          echo "<td><a href=\"show_movie.php?identifier=" . $movie_row["id"] .  "\">" . $movie_row["year"] . "</a></td>";
                         echo "</tr>";
                       }
                     echo "</tbody>";
@@ -161,6 +158,7 @@
                 echo "</table>";
               echo "</div>";
             }
+
             mysql_close($db_connection);
             ?>
           </form>
