@@ -95,7 +95,66 @@
         <div class="col-md-9">
           <div class="nav nav-sidebar">
             <form action="search.php" method="GET" style="margin-left: 5%">
-            <h3>Movie Information</h3>
+            <h3>Movie Information Page</h3>
+             <?php 
+              $db_connection = mysql_connect("localhost", "cs143", "");
+              mysql_select_db("CS143", $db_connection);
+
+              if($_GET["identifier"]) {
+                
+                $movie_query = mysql_query("SELECT title, company, rating FROM Movie WHERE(Movie.id = " . $_GET["identifier"] . ")", $db_connection);
+                if(!$movie_query)
+                    die("Query failed: " . mysql_error());
+
+                $director_query = mysql_query("SELECT CONCAT(first, \" \", last) AS director FROM (MovieDirector JOIN Movie ON MovieDirector.mid = Movie.id) JOIN Director ON MovieDirector.did = Director.id WHERE(Movie.id = " . $_GET["identifier"] . ")", $db_connection);
+                if(!$director_query)
+                    die("Query failed: " . mysql_error());
+
+                $genre_query = mysql_query("SELECT genre FROM MovieGenre JOIN Movie ON MovieGenre.mid = Movie.id WHERE(Movie.id = " . $_GET["identifier"] . ")", $db_connection);
+                if(!$genre_query)
+                    die("Query failed: " . mysql_error());
+
+                $actor_query = mysql_query("SELECT id, CONCAT(first, \" \", last) AS name, role FROM MovieActor JOIN Actor ON MovieActor.aid = Actor.id WHERE(mid = " . $_GET["identifier"] . ")", $db_connection);
+                if(!$actor_query)
+                    die("Query failed: " . mysql_error());
+
+                $movie_row = mysql_fetch_assoc($movie_query);
+                echo "<h4>Movie Information</h4>";
+                echo "Title: " . $movie_row["title"] . "<br>";
+                echo "Producer: " . $movie_row["company"] . "<br>";
+                echo "MPAA Rating: " . $movie_row["rating"] . "<br>";
+
+                $director_row = mysql_fetch_assoc($director_query);
+                echo "Director: " . $director_row["director"] . "<br>";
+
+                echo "Genre: ";
+                  while($genre_row = mysql_fetch_assoc($genre_query)) {
+                    echo $genre_row["genre"] . " ";
+                  }
+                echo "<br>";
+
+                echo "<br>";
+
+                echo "<h4>Actors in this Movie</h4>";
+                echo "<div class=\"table-responsive\">";
+                  echo "<table class=\"table table-bordered table-condensed table-hover\">";
+                    echo "<thead><tr><td>Name</td><td>Role</td></tr></thead>";
+                    if($actor_query) {
+                      echo "<tbody>";
+                        while($actor_row = mysql_fetch_assoc($actor_query)) {
+                          echo "<tr>";
+                            echo "<td><a href=\"show_actor.php?identifier=" . $actor_row["id"] .  "\">" . $actor_row["name"] . "</a></td>";
+                            echo "<td>" . $actor_row["role"] . "</td>";
+                          echo "</tr>";
+                        }
+                      echo "</tbody>";
+                    }
+                  echo "</table>";
+                echo "</div>";
+              }
+
+              mysql_close($db_connection);
+            ?>
             <div class="form-group">
               <label for="search">Search</label>
               <input type="text" class="form-control" placeholder="Search..." name="terms">
