@@ -43,6 +43,7 @@
                 <li><a href="add_movie.php">Add Movie Information</a></li>
                 <li><a href="add_movieactor.php">Add Movie/Actor Relation</a></li>
                 <li><a href="add_moviedirector.php">Add Movie/Director Relation</a></li>
+                <li><a href="add_review.php">Add Review</a></li>
               </ul>
             </li>
 
@@ -71,7 +72,7 @@
       <div class="col-md-12">
         <h3>Movie Database Project</h3>
         <p>
-          In Project 1B, you should create a fully functioning Movie Database system accessed by users exclusively through a Web interface. While there is much flexibility in the functionality required from your Movie Database system, all students are expected to implement the baseline capabilities described next.
+          In Project 1B, we created fully-functioning Movie Library database system accessed by users exclusively through a Web interface. The functionalities include adding actors and directors into the database, adding movies into the database while specifying the many genres it falls under, adding roles for actors in their respective movies, adding a director in his/her movie, adding reviews for movies (showing its average rating and the comments people have). Another feature that we have is the search functionality, which is basically used to search for a term in the database. There are 3 search pages, 1 for actors for browsing exclusively for an actor, 1 for movies for browsing exclusively for a movie, and 1 for a general search page.
         </p>
       </div>
     </div>
@@ -85,6 +86,7 @@
             <li><a href="add_movie.php">Add Movie Information</a></li>
             <li><a href="add_movieactor.php">Add Movie/Actor Relation</a></li>
             <li><a href="add_moviedirector.php">Add Movie/Director Relation</a></li>
+            <li><a href="add_review.php">Add Review</a></li>
           </ul>
       </div>
 
@@ -99,7 +101,7 @@
 
       <div class="col-md-4">
         <h3>Search Interface</h3>
-        <p>The add search content feature allows user to search more information to the relation. There are several search options that are supported:</p>
+        <p>The search content feature allows user to search more information to the relation. There is one search option that is supported:</p>
           <ul class="nav nav-sidebar">
             <li><a href="search.php">Search Actor/Movie</a></li>
           </ul>

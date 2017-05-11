@@ -43,6 +43,7 @@
                 <li><a href="add_movie.php">Add Movie Information</a></li>
                 <li><a href="add_movieactor.php">Add Movie/Actor Relation</a></li>
                 <li><a href="add_moviedirector.php">Add Movie/Director Relation</a></li>
+                <li><a href="add_review.php">Add Review</a></li>
               </ul>
             </li>
 
@@ -73,12 +74,13 @@
 
         <div class="col-md-3 sidebar">
           <ul class="nav nav-sidebar">
-              <h3>Add New Content</h3>
-              <li><a href="add_actordirector.php">Add Actor/Director</a></li>
-              <li><a href="add_movie.php">Add Movie Information</a></li>
-              <li><a href="add_movieactor.php">Add Movie/Actor Relation</a></li>
-              <li><a href="add_moviedirector.php">Add Movie/Director Relation</a></li>
-            </ul>
+            <h3>Add New Content</h3>
+            <li><a href="add_actordirector.php">Add Actor/Director</a></li>
+            <li><a href="add_movie.php">Add Movie Information</a></li>
+            <li><a href="add_movieactor.php">Add Movie/Actor Relation</a></li>
+            <li><a href="add_moviedirector.php">Add Movie/Director Relation</a></li>
+            <li><a href="add_review.php">Add Review</a></li>
+          </ul>
 
             <ul class="nav nav-sidebar">
               <h3>Browsing Content</h3>
@@ -107,8 +109,8 @@
               <input type="text" class="form-control" placeholder="Text Input" name="year">
             </div>
             <div class="form-group">
-              <label for="rate">MPAA Rating</label>
-              <select class="form-control" name="rate">
+              <label for="rating">MPAA Rating</label>
+              <select class="form-control" name="rating">
                 <?php
                   $db_connection = mysql_connect("localhost", "cs143", "");
                   mysql_select_db("CS143", $db_connection);
@@ -155,10 +157,10 @@
             $new_id = $MaxMovieID + 1;
 
             // create insertion query
-            $title = "\"" . $_GET["title"] . "\"";
-            $company = "\"" . $_GET["company"] . "\"";
+            $title = $_GET["title"];
+            $company = $_GET["company"];
             $year = $_GET["year"];
-            $rate = "\"" . $_GET["rate"] . "\"";
+            $rating = $_GET["rating"];
             $genre_get = $_GET["genre"];
 
             // insert into database
@@ -172,29 +174,23 @@
               if(!$year)
                 echo "Query failed: year is empty.<br>";
 
-              if(!$rate)
-                echo "Query failed: rate is empty.<br>";
-
               if(empty($genre_get))
                 echo "Query failed: genre is empty.<br>";
 
-              if($title && $company && $year && $rate && $genre_get) {
-                $query_Movie = "INSERT INTO Movie VALUES(" . $new_id . "," . $title . "," . $year . "," . $rate . "," . $company . ")";
+              if($title && $company && $year && $rating && $genre_get) {
+                $query_Movie = "INSERT INTO Movie VALUES(" . $new_id . ",\"" . $title . "\"," . $year . ",\"" . $rating . "\",\"" . $company . "\")";
 
-                foreach ($genre_get as $genre) {
-                  $genre_input = "\"" . $genre . "\"";
-                  $query_MovieGenre = "INSERT INTO MovieGenre VALUES (" . $new_id . "," . $genre_input . ")";
-                }
+                foreach ($genre_get as $genre)
+                  $query_MovieGenre = "INSERT INTO MovieGenre VALUES(" . $new_id . ",\"" . $genre . "\")";
 
                 $query_M = mysql_query($query_Movie, $db_connection);
                 $query_MG = mysql_query($query_MovieGenre, $db_connection);
 
-                if(!$query_M || !$query_MG) {
+                if(!$query_M || !$query_MG)
                   die("Query failed: " . mysql_error());
-                }
                 else {
                   echo "Add Movie Success:<br>";
-                  echo $new_id . " " . $_GET["title"]  . " " . $_GET["company"] . " " . $_GET["year"] . " " . $_GET["rate"];
+                  echo $new_id . " " . $title . " " . $company . " " . $year . " " . $rating;
 
                   // update maxmovie id
                   mysql_query("UPDATE MaxMovieID SET id=" . $new_id, $db_connection);

@@ -43,6 +43,7 @@
                 <li><a href="add_movie.php">Add Movie Information</a></li>
                 <li><a href="add_movieactor.php">Add Movie/Actor Relation</a></li>
                 <li><a href="add_moviedirector.php">Add Movie/Director Relation</a></li>
+                <li><a href="add_review.php">Add Review</a></li>
               </ul>
             </li>
 
@@ -73,23 +74,24 @@
 
         <div class="col-sm-3 col-md-3 sidebar">
           <ul class="nav nav-sidebar">
-              <h3>Add New Content</h3>
-              <li><a href="add_actordirector.php">Add Actor/Director</a></li>
-              <li><a href="add_movie.php">Add Movie Information</a></li>
-              <li><a href="add_movieactor.php">Add Movie/Actor Relation</a></li>
-              <li><a href="add_moviedirector.php">Add Movie/Director Relation</a></li>
-            </ul>
+            <h3>Add New Content</h3>
+            <li><a href="add_actordirector.php">Add Actor/Director</a></li>
+            <li><a href="add_movie.php">Add Movie Information</a></li>
+            <li><a href="add_movieactor.php">Add Movie/Actor Relation</a></li>
+            <li><a href="add_moviedirector.php">Add Movie/Director Relation</a></li>
+            <li><a href="add_review.php">Add Review</a></li>
+          </ul>
 
-            <ul class="nav nav-sidebar">
-              <h3>Browsing Content</h3>
-              <li><a href="show_actor.php">Show Actor Information</a></li>
-              <li><a href="show_movie.php">Show Movie Information</a></li>
-            </ul>
+          <ul class="nav nav-sidebar">
+            <h3>Browsing Content</h3>
+            <li><a href="show_actor.php">Show Actor Information</a></li>
+            <li><a href="show_movie.php">Show Movie Information</a></li>
+          </ul>
 
-            <ul class="nav nav-sidebar">
-              <h3>Search Interface</h3>
-              <li><a href="search.php">Search Actor/Movie</a></li>
-            </ul>
+          <ul class="nav nav-sidebar">
+            <h3>Search Interface</h3>
+            <li><a href="search.php">Search Actor/Movie</a></li>
+          </ul>
         </div>
 
         <div class="col-sm-9 col-md-9" style="padding-left: 5%">
@@ -144,12 +146,12 @@
     
             // create insertion query
             $identity = $_GET["identity"];
-            $sex = "\"" . $_GET["sex"] . "\"";
-            $fname = "\"" . $_GET["fname"] . "\"";
-            $lname = "\"" . $_GET["lname"] . "\"";
-            $dob = "\"" . $_GET["DOB"] . "\"";
-            $dod = "\"" . $_GET["DOD"] . "\"";
-            if($dod == "\"\"") $dod = "null";
+            $sex = $_GET["sex"];
+            $fname = $_GET["fname"];
+            $lname = $_GET["lname"];
+            $dob = $_GET["DOB"];
+            $dod = $_GET["DOD"];
+            if(!$dod) $dod = "null";
             
             // insert into database
             if(isset($_GET["btnSubmit"])) {
@@ -163,30 +165,44 @@
                 echo "Query failed: date of birth is empty.<br>";
 
               $date_regex = "/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/";
-              if(preg_match($date_regex, $dob))
+              
+              $dob_match = preg_match($date_regex, $dob);
+              if($dob && !$dob_match)
                 echo "Query failed: date of birth does not match format YYYY-MM-DD";
-
-              if($dod != "null" && preg_match($date_regex, $dod))
+              
+              $dod_match = preg_match($date_regex, $dod);
+              if($dod != "null" && !$dod_match)
                 echo "Query failed: date of death does not match format YYYY-MM-DD";
 
-              if($fname && $lname && $dob) {
+              if($fname && $lname && $dob && $dob_match) {
                 if($identity == "Actor") {
-                  $query = "INSERT INTO " . $identity . " VALUES(" . $new_id . "," . $lname . "," . $fname . "," . $sex . "," . $dob . "," . $dod . ")";
+                  if ($dod == "null")
+                    $query = "INSERT INTO " . $identity . " VALUES(" . $new_id . ",\"" . $lname . "\",\"" . $fname . "\",\"" . $sex . "\",\"" . $dob . "\"," . $dod . ")";
+                  else
+                    $query = "INSERT INTO " . $identity . " VALUES(" . $new_id . ",\"" . $lname . "\",\"" . $fname . "\",\"" . $sex . "\",\"" . $dob . "\",\"" . $dod . "\")";
                 }
                 else {
-                  $query = "INSERT INTO " . $identity . " VALUES(" . $new_id . "," . $lname . "," . $fname . "," . $dob . "," . $dod . ")";
+                  if ($dod == "null")
+                    $query = "INSERT INTO " . $identity . " VALUES(" . $new_id . ",\"" . $lname . "\",\"" . $fname . "\",\"" . $dob . "\"," . $dod . ")";
+                  else
+                    $query = "INSERT INTO " . $identity . " VALUES(" . $new_id . ",\"" . $lname . "\",\"" . $fname . "\",\"" . $dob . "\",\"" . $dod . "\")";
                 }
                 $rs = mysql_query($query, $db_connection);
-                if(!$rs) {
+                if(!$rs)
                   die("Query failed: " . mysql_error());
-                }
                 else {
-                  echo "Add " . $_GET["identity"] . " Success:<br>";
+                  echo "Add " . $identity . " Success:<br>";
                   if($dod == "null") {
-                    echo $new_id . " " . $_GET["lname"]  . " " . $_GET["fname"] . " " . $_GET["sex"] . " " . $_GET["DOB"] . " Still alive";
+                    if($actor == "Actor")
+                      echo $new_id . " " . $lname . " " . $fname . " " . $sex . " " . $DOB . " Still alive";
+                    else
+                      echo $new_id . " " . $lname . " " . $fname . " " . $DOB . " Still alive";
                   }
                   else {
-                    echo $new_id . " " . $_GET["lname"]  . " " . $_GET["fname"] . " " . $_GET["sex"] . " " . $_GET["DOB"] . " " . $_GET["DOD"];
+                    if($actor == "Actor")
+                      echo $new_id . " " . $lname . " " . $fname . " " . $sex . " " . $DOB . " " . $DOD;
+                    else
+                      echo $new_id . " " . $lname . " " . $fname . " " . $DOB . " " . $DOD;
                   }
 
                   // update maxperson id

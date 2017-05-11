@@ -43,6 +43,7 @@
                   <li><a href="add_movie.php">Add Movie Information</a></li>
                   <li><a href="add_movieactor.php">Add Movie/Actor Relation</a></li>
                   <li><a href="add_moviedirector.php">Add Movie/Director Relation</a></li>
+                  <li><a href="add_review.php">Add Review</a></li>
                 </ul>
               </li>
 
@@ -73,23 +74,24 @@
 
         <div class="col-md-3 sidebar">
           <ul class="nav nav-sidebar">
-              <h3>Add New Content</h3>
-              <li><a href="add_actordirector.php">Add Actor/Director</a></li>
-              <li><a href="add_movie.php">Add Movie Information</a></li>
-              <li><a href="add_movieactor.php">Add Movie/Actor Relation</a></li>
-              <li><a href="add_moviedirector.php">Add Movie/Director Relation</a></li>
-            </ul>
+            <h3>Add New Content</h3>
+            <li><a href="add_actordirector.php">Add Actor/Director</a></li>
+            <li><a href="add_movie.php">Add Movie Information</a></li>
+            <li><a href="add_movieactor.php">Add Movie/Actor Relation</a></li>
+            <li><a href="add_moviedirector.php">Add Movie/Director Relation</a></li>
+            <li><a href="add_review.php">Add Review</a></li>
+          </ul>
 
-            <ul class="nav nav-sidebar">
-              <h3>Browsing Content</h3>
-              <li><a href="show_actor.php">Show Actor Information</a></li>
-              <li><a href="show_movie.php">Show Movie Information</a></li>
-            </ul>
+          <ul class="nav nav-sidebar">
+            <h3>Browsing Content</h3>
+            <li><a href="show_actor.php">Show Actor Information</a></li>
+            <li><a href="show_movie.php">Show Movie Information</a></li>
+          </ul>
 
-            <ul class="nav nav-sidebar">
-              <h3>Search Interface</h3>
-              <li><a href="search.php">Search Actor/Movie</a></li>
-            </ul>
+          <ul class="nav nav-sidebar">
+            <h3>Search Interface</h3>
+            <li><a href="search.php">Search Actor/Movie</a></li>
+          </ul>
         </div>
 
         <div class="col-md-9">
@@ -159,7 +161,7 @@
               <label for="search">Search</label>
               <input type="text" class="form-control" placeholder="Search..." name="terms">
             </div>
-            <button type="submit" class="btn btn-default" onClick="document.location.href = 'search.php?terms=<?php echo $_GET["terms"]; ?>'">Add</button>
+            <button type="submit" class="btn btn-default" onClick="document.location.href = 'search.php?terms=<?php echo $_GET["terms"]; ?>'">Search</button>
           </form>
         </div>
       </div>

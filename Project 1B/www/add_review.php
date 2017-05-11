@@ -63,7 +63,7 @@
             </li>
           </ul>
         </div>
-
+        
       </div>
     </div>
     <!-- End Navbar -->
@@ -72,7 +72,7 @@
     <div class="container" style="margin-left: 0">
       <div class="row">
 
-        <div class="col-md-3 sidebar">
+        <div class="col-sm-3 col-md-3 sidebar">
           <ul class="nav nav-sidebar">
             <h3>Add New Content</h3>
             <li><a href="add_actordirector.php">Add Actor/Director</a></li>
@@ -93,87 +93,95 @@
             <li><a href="search.php">Search Actor/Movie</a></li>
           </ul>
         </div>
-        <div class="col-md-9">
-          <form action="add_movieactor.php" method="GET" style="margin-left: 5%">
-            <h3>Add Movie Actor</h3>
+
+        <div class="col-sm-9 col-md-9" style="padding-left: 5%">
+          <form action="add_review.php" method="GET">
+            <h3>Add Review</h3>
+            <div class="form-group">
+              <label for="first_name">Reviewer Name</label>
+              <input type="text" class="form-control" placeholder="Text Input" name="rname">
+            </div>
             <div class="form-group">
               <label for="movieid">Movie</label>
               <select class="form-control" name="movieid">
-                <option value="" selected></option>
                 <?php
+                  $mid = $_POST["mid"];
+                  if (!$mid)
+                    echo "<option value=\"\" selected></option>";
+                  else
+                    echo "<option value=\"\"></option>";
+
                   $db_connection = mysql_connect("localhost", "cs143", "");
                   mysql_select_db("CS143", $db_connection);
 
                   $movie_query = mysql_query("SELECT id, title, year FROM Movie ORDER BY title ASC", $db_connection);
-                  if(!$movie_query)
+                  if(!$movie_query) {
                     die("Query failed: " . mysql_error());
-
-                  while($row = mysql_fetch_assoc($movie_query))
-                    $movies[] = array($row["id"], $row["title"], $row["year"]);
-
+                  }
                   $movie_count = mysql_num_rows($movie_query);
+
+                  while($row = mysql_fetch_assoc($movie_query)){
+                    $movies[] = array($row["id"], $row["title"], $row["year"]);
+                  }
                   for ($i = 0; $i < $movie_count; $i++) {
                     $cur = $movies[$i];
-                    echo "<option value='" . $cur[0] . "'>" . $cur[1] . " (" . $cur[2] . ")</option>";
+                    if ($cur[0] == $mid)
+                      echo "<option value=\"" . $cur[0] . "\" selected>" . $cur[1] . " (" . $cur[2] . ")</option>";
+                    echo "<option value=\"" . $cur[0] . "\">" . $cur[1] . " (" . $cur[2] . ")</option>";
                   }
                 ?>
               </select>
-              <br>
-              <div class="form-group">
-                <label for="actorid">Actor</label>
-                <select class="form-control" name="actorid">
-                  <option value="" selected></option>
-                  <?php
-                    $actor_query = mysql_query("SELECT id, first, last, dob FROM Actor ORDER BY last, first ASC", $db_connection);
-                    if(!$actor_query)
-                      die("Query failed: " . mysql_error());
-
-                    while($row = mysql_fetch_assoc($actor_query))
-                      $actors[] = array($row["id"], $row["first"], $row["last"], $row["dob"]);
-
-                    $actor_count = mysql_num_rows($actor_query);
-                    for ($i = 0; $i < $actor_count; $i++) {
-                      $cur = $actors[$i];
-                      echo "<option value='" . $cur[0] . "'>" . $cur[1] . " " . $cur[2] . " (" . $cur[3] . ")</option>";
-                    }
-                  ?>
-                </select>
-              </div>
-              <br>
-              <div class="form-group">
-                <label for="role">Role</label>
-                <input type="text" class="form-control" name="role">
-              </div>
-              <br>
-              <button type="submit" class="btn btn-default" name="btnSubmit">Add</button>
             </div>
+            <label class="radio-inline">
+              <input type="radio" name="rating" value="1" checked="checked">1</input>
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="rating" value="2">2</input>
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="rating" value="3">3</input>
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="rating" value="4">4</input>
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="rating" value="5">5</input>
+            </label>
+            <div class="form-group">
+              <label for="DOB">Comment</label><br />
+              <textarea name="comment" cols="60" rows="8"></textarea>
+            </div>
+            <button type="submit" class="btn btn-default" name="btnSubmit">Add</button>
           </form>
           <br>
-          <?php
+          <?php 
+            $db_connection = mysql_connect("localhost", "cs143", "");
+            mysql_select_db("CS143", $db_connection);
+    
             // create insertion query
+            $rname = $_GET["rname"];
             $movieid = $_GET["movieid"];
-            $actorid = $_GET["actorid"];
-            $role = $_GET["role"];
-
+            $rating = $_GET["rating"];
+            $comment = $_GET["comment"];
+            
             // insert into database
             if(isset($_GET["btnSubmit"])) {
+              if(!$rname)
+                echo "Query failed: reviewer name is empty.<br>";
+
               if(!$movieid)
-                echo "Query failed: movieid is empty.<br>";
+                echo "Query failed: movie is not selected.<br>";
 
-              if(!$actorid)
-                echo "Query failed: actorid is empty.<br>";
+              if(!$comment)
+                echo "Query failed: comment is empty.<br>";
 
-              if(!$role)
-                echo "Query failed: role is empty.<br>";
-
-              if($movieid && $actorid && $role) {
-                $query = "INSERT INTO MovieActor VALUES(" . $movieid . "," . $actorid . ",\"" . $role . "\")";
-
+              if ($rname && $movieid && $comment) {
+                $query = "INSERT INTO Review VALUES(\"" . $rname . "\", now() ," . $movieid . "," . $rating . ",\"" . $comment . "\")";
                 $rs = mysql_query($query, $db_connection);
                 if(!$rs)
                   die("Query failed: " . mysql_error());
                 else
-                  echo "Add MovieActor Success.";
+                  echo "Add Review Success";
               }
               mysql_close($db_connection);
             }

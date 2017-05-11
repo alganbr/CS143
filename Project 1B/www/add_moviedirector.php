@@ -43,6 +43,7 @@
                 <li><a href="add_movie.php">Add Movie Information</a></li>
                 <li><a href="add_movieactor.php">Add Movie/Actor Relation</a></li>
                 <li><a href="add_moviedirector.php">Add Movie/Director Relation</a></li>
+                <li><a href="add_review.php">Add Review</a></li>
               </ul>
             </li>
 
@@ -72,50 +73,51 @@
 
         <div class="col-md-3 sidebar">
           <ul class="nav nav-sidebar">
-              <h3>Add New Content</h3>
-              <li><a href="add_actordirector.php">Add Actor/Director</a></li>
-              <li><a href="add_movie.php">Add Movie Information</a></li>
-              <li><a href="add_movieactor.php">Add Movie/Actor Relation</a></li>
-              <li><a href="add_moviedirector.php">Add Movie/Director Relation</a></li>
-            </ul>
+            <h3>Add New Content</h3>
+            <li><a href="add_actordirector.php">Add Actor/Director</a></li>
+            <li><a href="add_movie.php">Add Movie Information</a></li>
+            <li><a href="add_movieactor.php">Add Movie/Actor Relation</a></li>
+            <li><a href="add_moviedirector.php">Add Movie/Director Relation</a></li>
+            <li><a href="add_review.php">Add Review</a></li>
+          </ul>
 
-            <ul class="nav nav-sidebar">
-              <h3>Browsing Content</h3>
-              <li><a href="show_actor.php">Show Actor Information</a></li>
-              <li><a href="show_movie.php">Show Movie Information</a></li>
-            </ul>
+          <ul class="nav nav-sidebar">
+            <h3>Browsing Content</h3>
+            <li><a href="show_actor.php">Show Actor Information</a></li>
+            <li><a href="show_movie.php">Show Movie Information</a></li>
+          </ul>
 
-            <ul class="nav nav-sidebar">
-              <h3>Search Interface</h3>
-              <li><a href="search.php">Search Actor/Movie</a></li>
-            </ul>
+          <ul class="nav nav-sidebar">
+            <h3>Search Interface</h3>
+            <li><a href="search.php">Search Actor/Movie</a></li>
+          </ul>
         </div>
         <div class="col-md-9">
           <form action="add_moviedirector.php" method="GET" style="margin-left: 5%">
             <h3>Add Movie Director</h3>
             <div class="form-group">
-               <label for="movieid">Movie</label>
-               <select class="form-control" name="movieid">
+              <label for="movieid">Movie</label>
+              <select class="form-control" name="movieid">
                 <option value="" selected></option>
-                  <?php
-                    $db_connection = mysql_connect("localhost", "cs143", "");
-                    mysql_select_db("CS143", $db_connection);
+                <?php
+                  $db_connection = mysql_connect("localhost", "cs143", "");
+                  mysql_select_db("CS143", $db_connection);
 
-                    $movie_query = mysql_query("SELECT id, title, year FROM Movie ORDER BY title ASC", $db_connection);
-                    if(!$movie_query) {
-                      die("Query failed: " . mysql_error());
-                    }
-                    $movie_count = mysql_num_rows($movie_query);
+                  $movie_query = mysql_query("SELECT id, title, year FROM Movie ORDER BY title ASC", $db_connection);
+                  if(!$movie_query) {
+                    die("Query failed: " . mysql_error());
+                  }
+                  $movie_count = mysql_num_rows($movie_query);
 
-                    while($row = mysql_fetch_assoc($movie_query)){
-                      $movies[] = array($row["id"], $row["title"], $row["year"]);
-                    }
-                    for ($i = 0; $i < $movie_count; $i++) {
-                      $cur = $movies[$i];
-                      echo "<option value='" . $cur[0] . "'>" . $cur[1] . " (" . $cur[2] . ")</option>";
-                    }
-                  ?>
-               </select>
+                  while($row = mysql_fetch_assoc($movie_query)){
+                    $movies[] = array($row["id"], $row["title"], $row["year"]);
+                  }
+                  for ($i = 0; $i < $movie_count; $i++) {
+                    $cur = $movies[$i];
+                    echo "<option value='" . $cur[0] . "'>" . $cur[1] . " (" . $cur[2] . ")</option>";
+                  }
+                ?>
+              </select>
             </div>
             <br>
             <div class="form-group">
@@ -124,14 +126,13 @@
                 <option value="" selected></option>
                   <?php
                     $director_query = mysql_query("SELECT id, first, last, dob FROM Director ORDER BY last, first ASC", $db_connection);
-                    if(!$director_query) {
+                    if(!$director_query)
                       die("Query failed: " . mysql_error());
-                    }
-                    $director_count = mysql_num_rows($director_query);
 
-                    while($row = mysql_fetch_assoc($director_query)){
+                    while($row = mysql_fetch_assoc($director_query))
                       $directors[] = array($row["id"], $row["first"], $row["last"], $row["dob"]);
-                    }
+
+                    $director_count = mysql_num_rows($director_query);
                     for ($i = 0; $i < $director_count; $i++) {
                       $cur = $directors[$i];
                       echo "<option value='" . $cur[0] . "'>" . $cur[1] . " " . $cur[2] . " (" . $cur[3] . ")</option>";
@@ -160,12 +161,10 @@
                 $query = "INSERT INTO MovieDirector VALUES(" . $movieid . "," . $directorid . ")";
 
                 $rs = mysql_query($query, $db_connection);
-                if(!$rs) {
+                if(!$rs)
                   die("Query failed: " . mysql_error());
-                }
-                else {
+                else
                   echo "Add MovieDirector Success.";
-                }
               }
               mysql_close($db_connection);
             }
