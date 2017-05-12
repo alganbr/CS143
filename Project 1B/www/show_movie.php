@@ -134,20 +134,29 @@
                 echo "MPAA Rating: " . $movie_row["rating"] . "<br>";
 
                 $director_row = mysql_fetch_assoc($director_query);
-                echo "Director: " . $director_row["director"] . "<br>";
+                echo "Director: ";
+                if (!$director_row["director"])
+                  echo "No director found";
+                else
+                  echo $director_row["director"];
+                echo "<br>";
 
                 echo "Genre: ";
+                if (mysql_num_rows($genre_query) == 0)
+                  echo "No genres found";
+                else {
                   while($genre_row = mysql_fetch_assoc($genre_query))
                     echo $genre_row["genre"] . " ";
+                }
                 echo "<br>";
                 
                 echo "Average Rating: ";
-                  while($rating_row = mysql_fetch_assoc($rating_query)) {
-                    if (empty($rating_row))
-                      echo "No ratings yet";
-                    else
-                      echo $rating_row["avgrating"] . "/5";
-                  }
+                while($rating_row = mysql_fetch_assoc($rating_query)) {
+                  if (!$rating_row["avgrating"])
+                    echo "No ratings yet";
+                  else
+                    echo $rating_row["avgrating"] . "/5";
+                }
                 echo "<br>";
 
                 echo "<br>";

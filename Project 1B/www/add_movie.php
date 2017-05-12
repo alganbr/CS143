@@ -179,16 +179,17 @@
 
               if($title && $company && $year && $rating && $genre_get) {
                 $query_Movie = "INSERT INTO Movie VALUES(" . $new_id . ",\"" . $title . "\"," . $year . ",\"" . $rating . "\",\"" . $company . "\")";
-
-                foreach ($genre_get as $genre)
-                  $query_MovieGenre = "INSERT INTO MovieGenre VALUES(" . $new_id . ",\"" . $genre . "\")";
-
                 $query_M = mysql_query($query_Movie, $db_connection);
-                $query_MG = mysql_query($query_MovieGenre, $db_connection);
 
-                if(!$query_M || !$query_MG)
+                if(!$query_M)
                   die("Query failed: " . mysql_error());
                 else {
+                  foreach ($genre_get as $genre) {
+                    $query_MovieGenre = "INSERT INTO MovieGenre VALUES(" . $new_id . ",\"" . $genre . "\")";
+                    $query_MG = mysql_query($query_MovieGenre, $db_connection);
+                    if(!$query_MG)
+                      die("Query failed: " . mysql_error());
+                  }
                   echo "Add Movie Success:<br>";
                   echo $new_id . " " . $title . " " . $company . " " . $year . " " . $rating;
 
